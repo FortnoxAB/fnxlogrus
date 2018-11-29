@@ -21,6 +21,11 @@ func (jf *JSONFormatter) Format(entry *logrus.Entry) ([]byte, error) {
 		return jf.JSONFormatter.Format(entry)
 	}
 
+	if entry.Data[logrus.ErrorKey] == nil {
+		delete(entry.Data, logrus.ErrorKey)
+		return jf.JSONFormatter.Format(entry)
+	}
+
 	if err, ok := entry.Data[logrus.ErrorKey].(error); ok {
 		b := &strings.Builder{}
 		writeStack(b, errors.Cause(err))
