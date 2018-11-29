@@ -19,8 +19,8 @@ func Init(config Config) {
 
 	log.Printf("fnxlogrus: setting logrus logging level to %s\n", lvl)
 	logrus.SetLevel(lvl)
-	if config.Format == "json" {
-		log.Println("fnxlogrus: setting logrus logging formatter to json")
+	if config.formatter() != nil {
+		log.Printf("fnxlogrus: setting logrus logging formatter to %T\n", config.formatter())
 		logrus.SetFormatter(config.formatter())
 	}
 }
