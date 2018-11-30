@@ -32,7 +32,7 @@ func TestJSONFormatter(t *testing.T) {
 	}
 
 	jf := &JSONFormatter{}
-	for _, v := range tests {
+	for _, test := range tests {
 		buf := &strings.Builder{}
 
 		log := &logrus.Logger{
@@ -42,13 +42,13 @@ func TestJSONFormatter(t *testing.T) {
 		}
 
 		entry := logrus.NewEntry(log)
-		entry.WithError(v.err).Error(v.err)
+		entry.WithError(test.err).Error(test.err)
 
 		t.Log(buf.String())
-		for _, ex := range v.contains {
+		for _, ex := range test.contains {
 			assert.Contains(t, buf.String(), ex)
 		}
-		for _, ex := range v.notContains {
+		for _, ex := range test.notContains {
 			assert.NotContains(t, buf.String(), ex)
 		}
 	}
