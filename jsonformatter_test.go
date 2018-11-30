@@ -1,6 +1,7 @@
 package fnxlogrus
 
 import (
+	"fmt"
 	"strings"
 	"testing"
 
@@ -29,6 +30,11 @@ func TestJSONFormatter(t *testing.T) {
 			contains:    []string{"nil"},
 			notContains: []string{`"error":null`},
 		},
+		{
+			err:         fmt.Errorf("%s", "1"),
+			contains:    []string{`"msg":"1"`},
+			notContains: []string{`"error":"1"`},
+		},
 	}
 
 	jf := &JSONFormatter{}
@@ -44,7 +50,6 @@ func TestJSONFormatter(t *testing.T) {
 		entry := logrus.NewEntry(log)
 		entry.WithError(test.err).Error(test.err)
 
-		t.Log(buf.String())
 		for _, ex := range test.contains {
 			assert.Contains(t, buf.String(), ex)
 		}

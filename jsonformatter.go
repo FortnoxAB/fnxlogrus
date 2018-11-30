@@ -31,6 +31,8 @@ func (jf *JSONFormatter) Format(entry *logrus.Entry) ([]byte, error) {
 		writeStack(b, errors.Cause(err))
 		if b.String() != "" {
 			entry.Data["stacktrace"] = b.String()
+		}
+		if err.Error() == entry.Message {
 			delete(entry.Data, logrus.ErrorKey)
 		}
 	}
