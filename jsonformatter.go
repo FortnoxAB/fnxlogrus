@@ -28,7 +28,7 @@ func (jf *JSONFormatter) Format(entry *logrus.Entry) ([]byte, error) {
 
 	if err, ok := entry.Data[logrus.ErrorKey].(error); ok {
 		b := &strings.Builder{}
-		writeStack(b, errors.Cause(err))
+		writeStack(b, lastWithStack(err))
 		if b.String() != "" {
 			entry.Data["stacktrace"] = b.String()
 		}
@@ -52,4 +52,23 @@ func writeStack(w io.Writer, err error) {
 		}
 	}
 
+}
+
+// lastWithStack finds the most "upper" error in chain which has a stacktrace
+func lastWithStack(err error) error {
+	type stackTracer interface {
+		StackTrace() errors.StackTrace
+		Cause() error
+	}
+
+	lastError := err
+	for err != nil {
+		cause, ok := err.(stackTracer)
+		if !ok {
+			break
+		}
+		lastError = err
+		err = cause.Cause()
+	}
+	return lastError
 }
