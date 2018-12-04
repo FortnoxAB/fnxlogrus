@@ -20,6 +20,9 @@ func (c Config) formatter() logrus.Formatter {
 		if v == "json" {
 			return &JSONFormatter{}
 		}
+
+	case nil:
+		return &logrus.TextFormatter{FullTimestamp: true}
 	default:
 		log.Fatalln("fnxlog: unknown logging format: ", v)
 	}
