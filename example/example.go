@@ -10,7 +10,7 @@ import (
 
 func main() {
 
-	fnxlogrus.Init(fnxlogrus.Config{Format: "json"})
+	fnxlogrus.Init(fnxlogrus.Config{Format: "json"}, logrus.StandardLogger())
 
 	e := gin.Default()
 	// fetches a contextual logger that have some fields from the request. (ginlogrus)

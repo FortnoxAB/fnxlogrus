@@ -8,7 +8,7 @@ import (
 )
 
 func TestConfigCustomFormatter(t *testing.T) {
-	f := &logrus.TextFormatter{}
+	f := &logrus.TextFormatter{FullTimestamp: true}
 	c := Config{Format: f}
 	assert.Equal(t, f, c.formatter())
 }

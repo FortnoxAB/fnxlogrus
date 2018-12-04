@@ -1,8 +1,6 @@
 package fnxlogrus
 
 import (
-	"log"
-
 	"github.com/sirupsen/logrus"
 )
 
@@ -10,21 +8,16 @@ import (
 type Config struct {
 	Level  string
 	Format interface{}
+	//Formatter field is used if you need a custom formatter
+	Formatter logrus.Formatter
 }
 
 func (c Config) formatter() logrus.Formatter {
-	switch v := c.Format.(type) {
-	case logrus.Formatter:
-		return v
-	case string:
-		if v == "json" {
-			return &JSONFormatter{}
-		}
-
-	case nil:
-		return &logrus.TextFormatter{FullTimestamp: true}
-	default:
-		log.Fatalln("fnxlog: unknown logging format: ", v)
+	if c.Formatter != nil {
+		return c.Formatter
 	}
-	return nil
+	if c.Format == "json" {
+		return &JSONFormatter{}
+	}
+	return &logrus.TextFormatter{FullTimestamp: true}
 }
