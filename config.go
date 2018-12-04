@@ -7,7 +7,7 @@ import (
 // Config is the configuration
 type Config struct {
 	Level  string
-	Format interface{}
+	Format string `default:"text"`
 	//Formatter field is used if you need a custom formatter
 	Formatter logrus.Formatter
 }
